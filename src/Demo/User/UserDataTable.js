@@ -88,7 +88,7 @@ class UserDataTable extends React.Component {
         }
 
         return(
-                <BootstrapTable data={data} version="4" striped hover pagination search searchPlaceholder={"Cari berdasarkan nama atau no. bpjs"} edit options={options} selectRow={selectRow} exportCSV={true} csvFileName={'Data Pasien.csv'} expandableRow={this.expandableRow} expandComponent={this.expandComponent} expandColumnOptions={{expandColumnVisible: false}}>
+                <BootstrapTable data={data} version="4" striped hover pagination search searchPlaceholder={"Cari berdasarkan nama atau no. bpjs..."} edit options={options} selectRow={selectRow} exportCSV={true} csvFileName={'Data Pasien.csv'} expandableRow={this.expandableRow} expandComponent={this.expandComponent} expandColumnOptions={{expandColumnVisible: false}}>
                     <TableHeaderColumn dataField="id" isKey dataSort csvHeader="ID" hidden searchable={false}>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField="no" dataSort sortFunc={this.numericSortFunc.bind(this)} csvHeader="No" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="80" searchable={false}>No</TableHeaderColumn>
                     <TableHeaderColumn dataField="name" dataSort csvHeader="Name" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="120">Nama</TableHeaderColumn>

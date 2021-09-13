@@ -104,6 +104,10 @@ class MedicineDataTable extends React.Component {
       }
     }
 
+    priceFormatter = (cell) => {
+      return cell.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+
     actionFormatter = (cell, row) => {
       const { active } = this.props
         return(
@@ -128,7 +132,7 @@ class MedicineDataTable extends React.Component {
     }
     showTable = () => {
       const { data } = this.props
-      console.log(data)
+
       const options = {
           sortName: 'no',
           sizePerPageList: [{
@@ -151,14 +155,14 @@ class MedicineDataTable extends React.Component {
       }
 
       return(
-        <BootstrapTable data={data} version="4" striped hover pagination search searchPlaceholder={"Search by name, type, or applicant..."} edit options={options} selectRow={selectRow} exportCSV={true} csvFileName={this.fileNameFormat} expandableRow={this.expandableRow} expandComponent={this.expandComponent} expandColumnOptions={{expandColumnVisible: false}}>
+        <BootstrapTable data={data} version="4" striped hover pagination search searchPlaceholder={"Cari berdasarkan nama obat atau deskripsi..."} edit options={options} selectRow={selectRow} exportCSV={true} csvFileName={this.fileNameFormat} expandableRow={this.expandableRow} expandComponent={this.expandComponent} expandColumnOptions={{expandColumnVisible: false}}>
             <TableHeaderColumn dataField="id" isKey dataSort csvHeader="ID" hidden searchable={false}>ID</TableHeaderColumn>
             <TableHeaderColumn dataField="no" dataSort sortFunc={this.numericSortFunc.bind(this)} csvHeader="No" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="80" searchable={false}>No</TableHeaderColumn>
             <TableHeaderColumn dataField="name" dataSort csvHeader="Nama Obat" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="150">Nama Obat</TableHeaderColumn>
             <TableHeaderColumn dataField="description" dataSort csvHeader="Deskripsi" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="150">Deskripsi</TableHeaderColumn>
-            <TableHeaderColumn dataField="dose" dataSort csvHeader="Dosis" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="100">Dosis</TableHeaderColumn>
-            <TableHeaderColumn dataField="quantity" dataSort csvHeader="Kuantitas" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="100">Kuantitas</TableHeaderColumn>
-            <TableHeaderColumn dataField="price" dataSort csvHeader="Harga" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="100">Harga</TableHeaderColumn>
+            <TableHeaderColumn dataField="dose" dataSort csvHeader="Dosis" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Dosis</TableHeaderColumn>
+            <TableHeaderColumn dataField="quantity" dataSort csvHeader="Kuantitas" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Kuantitas</TableHeaderColumn>
+            <TableHeaderColumn dataField="price" dataSort dataFormat={this.priceFormatter.bind(this)} csvHeader="Harga" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Harga</TableHeaderColumn>
             <TableHeaderColumn dataAlign="center" dataField='action' export={false} dataFormat={ this.actionFormatter.bind(this) } thStyle={ { whiteSpace: 'normal', width: 300 } } tdStyle={ { whiteSpace: 'normal', width: 300 } } searchable={false} expandable={ false }>Action</TableHeaderColumn>
         </BootstrapTable>
       )
