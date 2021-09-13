@@ -12,6 +12,7 @@ import { fetchVoyage } from './voyages/getVoyages'
 import { fetchLocation } from './locations/getLocations'
 import { fetchReport } from './report/getReport'
 import { fetchRectangle } from './locations/getRectangle'
+import { fetchMedicine } from './medicine/getMedicine'
 
 const rootReducers = combineReducers({
     reducerStore: reducer,
@@ -26,6 +27,7 @@ const rootReducers = combineReducers({
     locationStore: fetchLocation,
     reportStore: fetchReport,
     rectangleStore: fetchRectangle,
+    medicineStore: fetchMedicine
 })
 
 export default rootReducers

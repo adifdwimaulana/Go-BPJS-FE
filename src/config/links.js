@@ -69,6 +69,13 @@ const LOCATION_RECTANGLE_URL = LOCATION_URL + '/rectangle'
 // Report
 const REPORT_URL = BASE_URL + '/report'
 
+// Medicine
+const MEDICINE_URL = BASE_URL + '/medicine'
+const MEDICINE_LIST_URL = MEDICINE_URL + '/list'
+const MEDICINE_ADD_URL = MEDICINE_URL + '/add'
+const MEDICINE_UPDATE_URL = MEDICINE_URL + '/update'
+const MEDICINE_DELETE_URL = MEDICINE_URL + '/delete'
+
 export {
     BASE_URL,
 
@@ -127,4 +134,10 @@ export {
     LOCATION_RECTANGLE_URL,
 
     REPORT_URL,
+
+    MEDICINE_URL,
+    MEDICINE_LIST_URL,
+    MEDICINE_ADD_URL,
+    MEDICINE_UPDATE_URL,
+    MEDICINE_DELETE_URL
 }
