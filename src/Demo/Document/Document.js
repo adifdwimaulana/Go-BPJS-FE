@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const DocumentRequest = () => {
+const DocumentRequest = (props) => {
 
-  const location = useLocation()
+  const location = props.location
   const data = location?.state
   const requestMedicines = data?.isReqmed || false; //state filter
   const dataDokter = [
@@ -136,7 +136,7 @@ const DocumentRequest = () => {
   const doctorName = dataDokter.filter((item)=>{
     return item.id === data.doctor_id
   })
-  console.log('dok', doctorName[0]?.name)
+  
   return (
     <Aux>
       <Row>
