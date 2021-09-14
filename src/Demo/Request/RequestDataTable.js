@@ -1,7 +1,8 @@
 import React from 'react'
 import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
-import QrReader from "react-qr-reader";import Aux from '../../hoc/_Aux'
+import QrReader from "react-qr-reader";
+import Aux from '../../hoc/_Aux'
 import { BeatLoader } from 'react-spinners'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -14,6 +15,7 @@ import Select from 'react-select';
 import { fetchRequest } from '../../redux/actions/request/getRequest'
 import { fetchMedicine } from '../../redux/actions/medicine/getMedicine'
 import { fetchUser } from '../../redux/actions/users/getUsers'
+import { withRouter } from 'react-router';
 
 class RequestDataTable extends React.Component {
   constructor(props){
@@ -115,7 +117,12 @@ class RequestDataTable extends React.Component {
   ageFormatter = (cell, row) => {
     return moment(new Date()).diff(moment(cell.ttl), 'years')
   }
-
+  handleTransferData = (pathname, data) => {
+    this.props.history.push({
+        pathname: pathname,
+        state: {...data, isReqmed:false}
+    });
+  };
   actionFormatter = (cell, row) => {
       return(
           <div>
@@ -123,7 +130,7 @@ class RequestDataTable extends React.Component {
                 cookie.load('roleId') == 1 && row.status == 1 ?
                 <div>
                     <Button onClick={() => this.toggleOpenMedicine(row)} size="sm" variant="primary"><i className="fa fa-plus"></i>Beri Resep</Button>
-                </div> : <Button onClick={() => console.log('Document Here')} size="sm" variant="secondary"><i className="fa fa-print"></i>Print</Button>
+                </div> : <Button onClick={() => this.handleTransferData('/document', row)} size="sm" variant="secondary"><i className="fa fa-print"></i>Print</Button>
               }
           </div>
       )
@@ -543,4 +550,4 @@ const mapStateToProps = (state) => {
 }
 
 
-export default connect(mapStateToProps, {fetchRequest, fetchMedicine, fetchUser})(RequestDataTable)
+export default connect(mapStateToProps, {fetchRequest, fetchMedicine, fetchUser})(withRouter(RequestDataTable))
