@@ -76,9 +76,6 @@ class ReqMedDataTable extends React.Component {
     customBtnGroup = (props) => {
         return(
             <div>
-                {
-                    cookie.load('roleId') < 2 ? <Button onClick={() => this.toggleOpenAdd()} variant="primary"><i className="fa fa-plus"></i>&nbsp;Add New User</Button> : null
-                }
                 { props.exportCSVBtn }
             </div>
         )

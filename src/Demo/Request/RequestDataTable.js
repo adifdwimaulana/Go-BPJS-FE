@@ -265,7 +265,7 @@ class RequestDataTable extends React.Component {
 
   render(){
     const { requests, requestProgress, medicineOptions, medicineProgress, users, userProgress } = this.props
-    const { modalScanner, modalAdd, isLoading, date, description, bp, height, weight, price } = this.state
+    const { modalScanner, modalAdd, modalMedicine, isLoading, date, description, bp, height, weight, price } = this.state
     
     return(
       <div>
@@ -332,6 +332,24 @@ class RequestDataTable extends React.Component {
                       <Form.Label>Biaya</Form.Label>
                       <Form.Control type="number" placeholder="0" value={price} onChange={(e) => this.setState({ price: e.target.value })} disabled={isLoading} autoComplete="off" required />
                   </Form.Group>
+
+                  <Button variant="success" size="sm" onClick={this.handleAdd} disabled={isLoading}>
+                    Tambah
+                  </Button>
+                </Form>
+              </Modal.Body>
+            </Modal> : null
+        }
+
+        {
+          modalMedicine ? 
+          medicineProgress || !medicineOptions ? <center><BeatLoader color={'#1de9b6'} loading={medicineProgress} /><br /> Loading.... Please wait...</center> :
+          <Modal show={modalMedicine} onHide={this.toggleCloseMedicine}>
+              <Modal.Header closeButton>
+                <Modal.Title>Resep Obat</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
 
                   <Button variant="success" size="sm" onClick={this.handleAdd} disabled={isLoading}>
                     Tambah

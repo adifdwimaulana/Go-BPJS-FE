@@ -46,13 +46,6 @@ export default {
                     ]
                 },
                 {
-                    id: 'profile',
-                    title: 'Profile',
-                    type: 'item',
-                    icon: 'feather icon-file',
-                    url: '/profile'
-                },
-                {
                     id: 'logout',
                     title: 'Keluar',
                     type: 'item',
