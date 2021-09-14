@@ -21,7 +21,7 @@ export default {
                     children: [
                         {
                             id: 'patient',
-                            title: 'Pasien',
+                            title: 'Anggota',
                             type: 'item',
                             url: '/management/patient'
                         },
