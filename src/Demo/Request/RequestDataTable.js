@@ -21,6 +21,7 @@ class RequestDataTable extends React.Component {
     this.state = {
       modalScanner: false,
       modalAdd: false,
+      modalMedicine: false,
       isLoading: false,
       date: new Date(),
       description: '',
@@ -63,6 +64,19 @@ class RequestDataTable extends React.Component {
     })
   }
 
+  toggleOpenMedicine = () => {
+    this.props.fetchMedicine({ organization_id: 4 })
+    this.setState({
+      modalMedicine: !this.state.modalMedicine
+    })
+  }
+
+  toggleCloseMedicine = () => {
+    this.setState({
+      modalMedicine: !this.state.modalMedicine
+    })
+  }
+
   numericSortFunc = (a,b,order) => {
     if (order === 'desc'){
         return Number(b.no) - Number(a.no)
@@ -91,11 +105,10 @@ class RequestDataTable extends React.Component {
       return(
           <div>
               {
-                cookie.load('roleId') == 1 ?
+                cookie.load('roleId') == 1 && row.status == 1 ?
                 <div>
-                    <Button onClick={() => this.toggleOpenEdit(row)} size="sm" variant="success"><i className="fa fa-pencil"></i>Ubah</Button>
-                    <Button onClick={() => this.toggleOpenDelete(row)} size="sm" variant="danger"><i className="fa fa-trash"></i>Hapus</Button>
-                </div> : '-'
+                    <Button onClick={() => this.toggleOpenMedicine(row)} size="sm" variant="primary"><i className="fa fa-plus"></i>Beri Resep</Button>
+                </div> : <Button onClick={() => console.log('Document Here')} size="sm" variant="secondary"><i className="fa fa-print"></i>Print</Button>
               }
           </div>
       )
@@ -145,7 +158,7 @@ class RequestDataTable extends React.Component {
                 <TableHeaderColumn dataField="user" dataFormat={this.bpjsFormatter.bind(this)} dataSort csvHeader="No. BPJS" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="160">No. BPJS</TableHeaderColumn>
                 <TableHeaderColumn dataField="user" dataFormat={this.ageFormatter.bind(this)} dataSort csvHeader="Usia" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="80">Usia</TableHeaderColumn>
                 <TableHeaderColumn dataField="bp" dataSort csvHeader="Tekanan Darah" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="160">Tekanan Darah</TableHeaderColumn>
-                <TableHeaderColumn dataAlign="center" dataField='status' export={false} dataFormat={ this.actionFormatter.bind(this) } thStyle={ { whiteSpace: 'normal', width: 300 } } tdStyle={ { whiteSpace: 'normal', width: 300 } } searchable={false} expandable={ false }>Aksi</TableHeaderColumn>
+                <TableHeaderColumn dataAlign="center" dataField='status' export={false} dataFormat={ this.actionFormatter.bind(this) } thStyle={ { whiteSpace: 'normal', width: 200 } } tdStyle={ { whiteSpace: 'normal', width: 200 } } searchable={false} expandable={ false }>Aksi</TableHeaderColumn>
             </BootstrapTable>
     )
   }

@@ -15,7 +15,7 @@ export function fetchMedicine(state = defaultState, action){
 
             medicines.forEach((result, index) => {
                 list.push({
-                    label: result.name,
+                    label: `${result.name} (${result.dose} gram)`,
                     value: result.id,
                 })
             })
