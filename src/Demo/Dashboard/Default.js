@@ -15,17 +15,17 @@ import { fetchRectangle } from '../../redux/actions/locations/getRectangle';
 import { fetchReport } from '../../redux/actions/report/getReport'
 
 const data = {
-    labels: [],
+    labels: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
     datasets: [
       {
-        label: "EEOI vs Timestamp",
-        data: [],
+        label: "Jumlah Pasien",
+        data: [3, 5, 6, 0, 0],
         fill: true,
         backgroundColor: "rgba(75,192,192,0.2)",
         borderColor: "rgba(75,192,192,1)"
-      }
+      },
     ]
-};
+  };
 
 class Dashboard extends React.Component {
     constructor(props){
@@ -54,13 +54,13 @@ class Dashboard extends React.Component {
                 <div>
                     <Row>
                         <Col md="4" xl="4">
-                            <SummaryWidget title="Laporan Harian" value={5} color="green" icon="icon-arrow-up" />
+                            <SummaryWidget title="Pasien Harian" value={6} color="green" icon="icon-arrow-up" />
                         </Col>
                         <Col md="4" xl="4">
-                            <SummaryWidget title="Laporan Mingguan" value={5} color="blue" icon="icon-arrow-right" />
+                            <SummaryWidget title="Pasien Mingguan" value={35} color="blue" icon="icon-arrow-right" />
                         </Col>
                         <Col md="4" xl="4">
-                            <SummaryWidget title="Laporan Bulanan" value={5} color="red" icon="icon-arrow-down" />
+                            <SummaryWidget title="Pasien Bulanan" value={127} color="red" icon="icon-arrow-down" />
                         </Col>
                     </Row>
                     <Row>
@@ -70,6 +70,7 @@ class Dashboard extends React.Component {
                                     <Card.Title as='h5'>{cookie.load('roleId') < 3 ? 'Laporan Pemeriksaan' : 'Laporan Permintaan Obat'}</Card.Title>
                                 </Card.Header>
                                 <Card.Body>
+                                    <Line data={data} height={100} />
                                 </Card.Body>
                             </Card>
                         </Col>
