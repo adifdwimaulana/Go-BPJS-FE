@@ -77,10 +77,11 @@ const MEDICINE_UPDATE_URL = MEDICINE_URL + '/update'
 const MEDICINE_DELETE_URL = MEDICINE_URL + '/delete'
 
 //REQUEST
-const REQUEST_LIST_URL = BASE_URL + '/list'
-const REQUEST_ADD_URL = BASE_URL + '/add'
-const REQUEST_UPDATE_URL = BASE_URL + '/update'
-const REQUEST_DELETE_URL = BASE_URL + '/delete'
+const REQUEST_URL = BASE_URL + '/request'
+const REQUEST_LIST_URL = REQUEST_URL + '/list'
+const REQUEST_ADD_URL = REQUEST_URL + '/add'
+const REQUEST_UPDATE_URL = REQUEST_URL + '/update'
+const REQUEST_DELETE_URL = REQUEST_URL + '/delete'
 
 
 export {
