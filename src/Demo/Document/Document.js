@@ -134,7 +134,7 @@ const DocumentRequest = (props) => {
   };
   
   const doctorName = dataDokter.filter((item)=>{
-    return item.id === data.doctor_id
+    return item.id === data?.doctor_id
   })
   
   return (
