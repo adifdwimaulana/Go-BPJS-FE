@@ -83,6 +83,13 @@ const REQUEST_ADD_URL = REQUEST_URL + '/add'
 const REQUEST_UPDATE_URL = REQUEST_URL + '/update'
 const REQUEST_DELETE_URL = REQUEST_URL + '/delete'
 
+//Reqmed
+const REQMED_URL = BASE_URL + '/request-medicine'
+const REQMED_LIST_URL = REQMED_URL + '/list'
+const REQMED_ADD_URL = REQMED_URL + '/add'
+const REQMED_UPDATE_URL = REQMED_URL + '/update'
+const REQMED_DELETE_URL = REQMED_URL + '/delete'
+
 
 export {
     BASE_URL,
@@ -153,4 +160,9 @@ export {
     REQUEST_ADD_URL,
     REQUEST_UPDATE_URL,
     REQUEST_DELETE_URL,
+
+    REQMED_LIST_URL,
+    REQMED_ADD_URL,
+    REQMED_UPDATE_URL,
+    REQMED_DELETE_URL
 }

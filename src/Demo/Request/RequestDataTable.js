@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Form } from 'react-bootstrap'
+import { Button, Modal, Form, Row, Col } from 'react-bootstrap'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import QrReader from "react-qr-reader";import Aux from '../../hoc/_Aux'
 import { BeatLoader } from 'react-spinners'
@@ -9,6 +9,7 @@ import moment from 'moment'
 import cookie from 'react-cookies'
 import axios from 'axios'
 import * as API_LINKS from '../../config/links'
+import Select from 'react-select';
 
 import { fetchRequest } from '../../redux/actions/request/getRequest'
 import { fetchMedicine } from '../../redux/actions/medicine/getMedicine'
@@ -30,6 +31,12 @@ class RequestDataTable extends React.Component {
       weight: 0,
       price: 0,
       userId: 0,
+      medicineOne: null,
+      medicineOneQty: 0,
+      medicineTwo: null,
+      medicineTwoQty: 0,
+      medicineThree: null,
+      medicineThreeQty: 0,
     }
   }
 
@@ -64,16 +71,24 @@ class RequestDataTable extends React.Component {
     })
   }
 
-  toggleOpenMedicine = () => {
+  toggleOpenMedicine = (row) => {
     this.props.fetchMedicine({ organization_id: 4 })
     this.setState({
+      requestId: row.id,
       modalMedicine: !this.state.modalMedicine
     })
   }
 
   toggleCloseMedicine = () => {
     this.setState({
-      modalMedicine: !this.state.modalMedicine
+      requestId: null,
+      medicineOne: null,
+      medicineOneQty: 0,
+      medicineTwo: null,
+      medicineTwoQty: 0,
+      medicineThree: null,
+      medicineThreeQty: 0,
+      modalMedicine: !this.state.modalMedicine,
     })
   }
 
@@ -263,9 +278,118 @@ class RequestDataTable extends React.Component {
     })
   }
 
+  handleAddMedicine = () => {
+    const auth = cookie.load('token')
+    this.setState({ isLoading: true })
+    const { requestId, medicineOne, medicineOneQty, medicineTwo, medicineTwoQty, medicineThree, medicineThreeQty } = this.state
+    let medicines = []
+
+    if(medicineOne){
+      medicines.push({
+        medicine_id: medicineOne.value,
+        quantity: medicineOneQty
+      })
+    }
+
+    if(medicineTwo){
+      medicines.push({
+        medicine_id: medicineTwo.value,
+        quantity: medicineTwoQty
+      })
+    }
+
+    if(medicineThree){
+      medicines.push({
+        medicine_id: medicineThree.value,
+        quantity: medicineThreeQty
+      })
+    }
+
+    axios({
+        method: 'post',
+        url: API_LINKS.REQMED_ADD_URL,
+        headers: {
+            Authorization: auth
+        },
+        data: { request_id: requestId, medicines }
+    })
+    .then((response) => {
+        if(response.status === 200){
+            if(response.data.status === 200){
+              axios({
+                method: 'post',
+                url: API_LINKS.REQUEST_UPDATE_URL,
+                headers: {
+                    Authorization: auth
+                },
+                    data: { id: requestId, status: 2 }
+                })
+                .then((response) => {
+                  if(response.status === 200){
+                    this.setState({
+                        isLoading: false
+                    })
+                    this.toggleCloseMedicine()
+                    this.props.fetchUser()
+                    this.props.fetchRequest()
+    
+                    return toast.success("Data obat berhasil ditambahkan!")
+                  }
+                })
+            } else {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error(response.data.message)
+            }
+        }
+    })
+    .catch((error) => {
+        if (error.response) {
+            if(error.response.status === 401) {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error("Invalid credentials! Please try again!");
+            } else if (error.response.status === 403) {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error("Unauthorized Access! Please try to logout..");
+            } else if (error.response.status === 400) {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error(error.response.data.message);
+            } else if (error.response.status === 404 || error.response.status === 500) {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error("Server cannot be contacted! Please ask your system administrator!");
+            } else {
+                this.setState({
+                    isLoading: false
+                })
+                return toast.error('Something went wrong... Please try again later...')
+            }
+        } else if (error.request) {
+            this.setState({
+                isLoading: false
+            })
+            return toast.error('Request error! Please try again later...')
+        } else {
+            this.setState({
+                isLoading: false
+            })
+            return toast.error('Something went wrong... Please try again later...')
+        }
+    })
+  }
+
   render(){
     const { requests, requestProgress, medicineOptions, medicineProgress, users, userProgress } = this.props
-    const { modalScanner, modalAdd, modalMedicine, isLoading, date, description, bp, height, weight, price } = this.state
+    const { modalScanner, modalAdd, modalMedicine, isLoading, date, description, bp, height, weight, price, 
+            medicineOne, medicineOneQty, medicineTwo, medicineTwoQty, medicineThree, medicineThreeQty } = this.state
     
     return(
       <div>
@@ -350,8 +474,49 @@ class RequestDataTable extends React.Component {
               </Modal.Header>
               <Modal.Body>
                 <Form>
-
-                  <Button variant="success" size="sm" onClick={this.handleAdd} disabled={isLoading}>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="obat1">
+                        <Form.Label>Obat</Form.Label>
+                        <Select options={medicineOptions} onChange={medicineOne => this.setState({medicineOne})} value={medicineOne} placeholder="Nama Obat" isDisabled={isLoading} isClearable autoComplete="off" />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="qty">
+                        <Form.Label>Kuantitas</Form.Label>
+                        <Form.Control type="number" placeholder="5" value={medicineOneQty} onChange={(e) => this.setState({ medicineOneQty: e.target.value })} disabled={isLoading} autoComplete="off" required />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="obat2">
+                        <Form.Label>Obat</Form.Label>
+                        <Select options={medicineOptions} onChange={medicineTwo => this.setState({medicineTwo})} value={medicineTwo} placeholder="Nama Obat" isDisabled={isLoading} isClearable autoComplete="off" />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="qty">
+                        <Form.Label>Kuantitas</Form.Label>
+                        <Form.Control type="number" placeholder="5" value={medicineTwoQty} onChange={(e) => this.setState({ medicineTwoQty: e.target.value })} disabled={isLoading} autoComplete="off" required />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group controlId="obat3">
+                        <Form.Label>Obat</Form.Label>
+                        <Select options={medicineOptions} onChange={medicineThree => this.setState({medicineThree})} value={medicineThree} placeholder="Nama Obat" isDisabled={isLoading} isClearable autoComplete="off" />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group controlId="qty">
+                        <Form.Label>Kuantitas</Form.Label>
+                        <Form.Control type="number" placeholder="5" value={medicineThreeQty} onChange={(e) => this.setState({ medicineThreeQty: e.target.value })} disabled={isLoading} autoComplete="off" required />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Button variant="success" size="sm" onClick={this.handleAddMedicine} disabled={isLoading}>
                     Tambah
                   </Button>
                 </Form>
