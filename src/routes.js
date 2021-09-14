@@ -12,11 +12,13 @@ const Ship = React.lazy(() => import('./Demo/Ship/Ship'))
 const Voyage = React.lazy(() => import('./Demo/Voyage/Voyage'))
 const Location = React.lazy(() => import('./Demo/Location/Location'))
 const Medicine = React.lazy(() => import('./Demo/Medicine/Medicine'))
+const Document = React.lazy(()=> import('./Demo/Document/Document'))
 
 const routes = [
     { path: '/dashboard', exact: true, name: 'Default', component: DashboardDefault },
     { path: '/management/medicine', exact: true, name: 'Management Medicine', component: Medicine },
     { path: '/management/patient', exact: true, name: 'Management Patient', component: User },
+    { path: '/document', exact: true, name: 'Document Request', component: Document },
     { path: '/management/ship', exact: true, name: 'Management Ship', component: Ship },
     { path: '/management/voyage', exact: true, name: 'Management Voyage', component: Voyage },
     { path: '/voyage/:id', exact: true, name: 'Management Location', component: Location }
