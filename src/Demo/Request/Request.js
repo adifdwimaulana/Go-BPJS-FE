@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import { fetchRequest } from '../../redux/actions/request/getRequest'
 
+import RequestDataTable from './RequestDataTable'
+
 class Request extends React.Component {
   componentWillMount = () => {
     this.props.fetchRequest()
@@ -21,6 +23,7 @@ class Request extends React.Component {
                           <Card.Title as='h5'>Data Pemeriksaan</Card.Title>
                       </Card.Header>
                       <Card.Body>
+                        <RequestDataTable data={requests} />
                       </Card.Body>
                   </Card>
               </Col>
