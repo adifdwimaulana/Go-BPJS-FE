@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import cookie from 'react-cookies'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 import { BeatLoader } from 'react-spinners'
 import { toast } from 'react-toastify'
 import * as API_LINKS from '../../config/links'
@@ -13,6 +14,7 @@ import { fetchRequest } from '../../redux/actions/request/getRequest'
 
 
 class ReqMedDataTable extends React.Component {
+    
     constructor(props){
         super(props)
 
@@ -49,13 +51,20 @@ class ReqMedDataTable extends React.Component {
         return moment(new Date()).diff(moment(cell.ttl), 'years')
     }
 
+    handleTransferData = (pathname, data) => {
+        this.props.history.push({
+            pathname: pathname,
+            state: {...data, isReqmed:true}
+        });
+    };
+
     actionFormatter = (cell, row) => {
         return(
             <div>
                 {
                   cookie.load('roleId') == 3 ?
                   <div>
-                        {(cell===1 || cell ===4) && <span>Menunggu Konfirmasi</span> }
+                      <Button onClick={() => this.handleTransferData('/document', row)} size="sm" variant="secondary"><i className="fa fa-pencil"></i>Print</Button>
                       {cell===2&&<Button onClick={() => this.handleUpdateStatus(row, "accept")} size="sm" variant="primary"><i className="fa fa-pencil"></i>Accept</Button>}
                       {cell===3&&<Button onClick={() => this.handleUpdateStatus(row, "done")} size="sm" variant="success"><i className="fa fa-pencil"></i>Done</Button>}
                   </div> : '-'
@@ -210,4 +219,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {fetchRequest})(ReqMedDataTable)
+export default connect(mapStateToProps, {fetchRequest})(withRouter(ReqMedDataTable))

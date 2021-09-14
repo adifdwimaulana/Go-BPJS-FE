@@ -4,11 +4,13 @@ import {
   PDFViewer,
   StyleSheet,
   Text,
-  View,
+  View
 } from "@react-pdf/renderer";
 import moment from "moment";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { withRouter } from "react-router";
+import { useLocation } from "react-router-dom";
 import Aux from "../../hoc/_Aux";
 
 const styles = StyleSheet.create({
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title2: {
-    marginBottom: 20,
+    marginBottom: 50,
     fontSize: 20,
     textAlign: "center",
     fontSize: "11pt",
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     textAlign: "left",
-    marginLeft: 20,
+    marginLeft: 40,
     width: 350,
     padding: 5,
     fontSize: "10pt",
@@ -60,7 +62,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   tableColHeader: {
-    width: "25%",
+    width: "30%",
+    borderStyle: "solid",
+    borderColor: "#bfbfbf",
+    borderBottomColor: "#000",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+  },
+  tableColHeaderNo: {
+    width: "10%",
     borderStyle: "solid",
     borderColor: "#bfbfbf",
     borderBottomColor: "#000",
@@ -69,7 +80,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
   },
   tableCol: {
-    width: "25%",
+    width: "30%",
+    borderStyle: "solid",
+    borderColor: "#bfbfbf",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+  },
+  tableColNo: {
+    width: "10%",
     borderStyle: "solid",
     borderColor: "#bfbfbf",
     borderWidth: 1,
@@ -90,67 +109,34 @@ const styles = StyleSheet.create({
 });
 
 const DocumentRequest = () => {
-    const requestMedicines = false; //state filter
 
-    const dataDummy = 
-    {
-      id: 1,
-      date: "2021-09-12T00:00:00.000Z",
-      nurse_id: 4,
-      doctor_id: 3,
-      organization_id: 2,
-      drugstore_id: 4,
-      user_id: 15,
-      description: "Gejala Hyperthyroid",
-      bp: "120/90",
-      height: 165,
-      weight: 53,
-      price: 150000,
-      status: 4,
-      createdAt: "2021-09-12T08:36:22.258Z",
-      updatedAt: "2021-09-12T08:43:32.645Z",
-      medicines: [
-        {
-          id: 6,
-          name: "Asam Mefenamat",
-          dose: 500,
-          price: 5000,
-          quantity: 100,
-          reqmeds: {
-            id: 1,
-            request_id: 1,
-            medicine_id: 6,
-            quantity: 2,
-          },
-          Requestmedicines: {
-            createdAt: "2021-09-12T08:41:11.125Z",
-            updatedAt: "2021-09-12T08:41:11.125Z",
-            medicine_id: 6,
-            request_id: 1,
-          },
-        },
-        {
-          id: 7,
-          name: "Piroxicam",
-          dose: 20,
-          price: 4500,
-          quantity: 100,
-          reqmeds: {
-            id: 2,
-            request_id: 1,
-            medicine_id: 7,
-            quantity: 4,
-          },
-          Requestmedicines: {
-            createdAt: "2021-09-12T08:41:17.450Z",
-            updatedAt: "2021-09-12T08:41:17.450Z",
-            medicine_id: 7,
-            request_id: 1,
-          },
-        },
-      ],
-      no: 1,
-    }
+  const location = useLocation()
+  const data = location?.state
+  const requestMedicines = data?.isReqmed || false; //state filter
+  const dataDokter = [
+    { id: 3, name: 'dr. Ari' },
+    { id: 2, name: 'dr. Iwan' }
+  ]
+  const handleDate = (date, type) => {
+    const  fixDate = moment(date).format(type==='ttd'?"DD-MMMM-YYYY":'YYYY/MM/DD');
+    return fixDate;
+  }
+
+  const convertToRupiah = angka => {
+    var rupiah = '';
+    var angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return rupiah
+      .split('', rupiah.length - 1)
+      .reverse()
+      .join('');
+  };
+  
+  const doctorName = dataDokter.filter((item)=>{
+    return item.id === data.doctor_id
+  })
+  console.log('dok', doctorName[0]?.name)
   return (
     <Aux>
       <Row>
@@ -168,7 +154,7 @@ const DocumentRequest = () => {
                             <Text style={{ textAlign: "left", marginRight:5 }}>: </Text>
                         </View>
                         <Text style={{ textAlign: "left", textAlign:'justify', fontSize:'10pt' }}>
-                          2021/08/22
+                          {handleDate(data?.date, "normal")||''}
                         </Text>
                     </View>
                     <View style={styles.row}>
@@ -177,7 +163,7 @@ const DocumentRequest = () => {
                             <Text style={{ textAlign: "left", marginRight:5 }}>: </Text>
                         </View>
                         <Text style={{ textAlign: "left", textAlign:'justify', fontSize:'10pt' }}>
-                          is simply dummy 
+                          {data?.user?.name||''}
                         </Text>
                     </View>
                     <View style={styles.row}>
@@ -186,41 +172,22 @@ const DocumentRequest = () => {
                             <Text style={{ textAlign: "left", marginRight:5 }}>: </Text>
                         </View>
                         <Text style={{ textAlign: "left", textAlign:'justify', fontSize:'10pt' }}>
-                          is simply dummy 
+                          {doctorName[0]?.name || ''}
                         </Text>
                     </View>
                     <View style={styles.row}>
                         <View style={{flexDirection:'row', justifyContent:'space-between', width:142}}>
-                            <Text style={{ textAlign: "left" }}>{requestMedicines?"Apotik Rujukan":"Faskes"}</Text>
-                            <Text style={{ textAlign: "left", marginRight:5 }}>: </Text>
-                        </View>
-                        <Text style={{ textAlign: "left", textAlign:'justify', fontSize:'10pt' }}>
-                          is simply dummy 
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <View style={{flexDirection:'row', justifyContent:'space-between', width:246}}>
                             <Text style={{ textAlign: "left" }}>Deskripsi</Text>
                             <Text style={{ textAlign: "left", marginRight:5 }}>: </Text>
                         </View>
                         <Text style={{ textAlign: "left", textAlign:'justify', fontSize:'10pt' }}>
-                          {" "}
-                          is simply dummy text of the printing and typesetting
-                          industry. Lorem Ipsum has been the industry's standard
-                          dummy text ever since the 1500s, when an unknown
-                          printer took a galley of type and scrambled it to make
-                          a type specimen book. It has survived not only five
-                          centuries, but also the leap into electronic
-                          typesetting, remaining essentially unchanged. It was
-                          popularised in the 1960s with the release of Letraset
-                          sheets containing Lorem Ipsum passages, and more
-                          recently with desktop publishin
+                        {data?.description||''}
                         </Text>
                     </View>
                     <View style={{ padding: 40 }}>
                       <View style={styles.table}>
                         <View style={styles.tableRow}>
-                          <View style={styles.tableColHeader}>
+                          <View style={styles.tableColHeaderNo}>
                             <Text style={styles.tableCellHeader}>No.</Text>
                           </View>
                           <View style={styles.tableColHeader}>
@@ -230,25 +197,25 @@ const DocumentRequest = () => {
                             <Text style={styles.tableCellHeader}>Jumlah</Text>
                           </View>
                           <View style={styles.tableColHeader}>
-                            <Text style={styles.tableCellHeader}>Penggunaan</Text>
+                            <Text style={styles.tableCellHeader}>Harga</Text>
                           </View>
                         </View>
                         {
-                                dataDummy.medicines.map((med,id)=>{
+                                data?.medicines?.map((med,id)=>{
                                     return(
                                     <View style={styles.tableRow}>
-                                        <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>{id+1}.</Text>
+                                        <View style={styles.tableColNo}>
+                                            <Text style={styles.tableCell}>{id+1||''}.</Text>
                                         </View>
                                         <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>{med.name}.</Text>
+                                            <Text style={styles.tableCell}>{med.name||''} {`(${med.dose||''} mg)`}</Text>
                                         </View>
                                         <View style={styles.tableCol}>
-                                            <Text style={styles.tableCell}>{med.quantity}</Text>
+                                            <Text style={styles.tableCell}>{med.reqmeds.quantity||''} lembar</Text>
                                         </View>
                                         <View style={styles.tableCol}>
                                             <Text style={styles.tableCell}>
-                                            {med.dose}
+                                            Rp. {convertToRupiah(med.price||0)}
                                             </Text>
                                         </View>
                                     </View>
@@ -259,8 +226,8 @@ const DocumentRequest = () => {
                     </View>
                     <View style={{fontSize:'10pt', padding:5, position:'absolute', bottom:100, left:40}}>
                         <Text style={{marginBottom:10}}>{requestMedicines?"Menyetujui":"Mengetahui"}</Text>
-                        <Text style={{marginBottom:70}}>Probolinggo, {moment(dataDummy.date).format('DD MMMM YYYY')}</Text>
-                        <Text>Dr. Iwan</Text>
+                        <Text style={{marginBottom:70}}>Probolinggo, {handleDate(data?.date||'', "ttd")}</Text>
+                        <Text>{doctorName[0]?.name||''}</Text>
                     </View>
                   </View>
                 </Page>
@@ -273,4 +240,5 @@ const DocumentRequest = () => {
   );
 };
 
-export default DocumentRequest;
+
+export default withRouter(DocumentRequest);
