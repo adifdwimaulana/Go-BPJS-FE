@@ -161,7 +161,7 @@ class MedicineDataTable extends React.Component {
             <TableHeaderColumn dataField="name" dataSort csvHeader="Nama Obat" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="150">Nama Obat</TableHeaderColumn>
             <TableHeaderColumn dataField="description" dataSort csvHeader="Deskripsi" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } searchable width="150">Deskripsi</TableHeaderColumn>
             <TableHeaderColumn dataField="dose" dataSort csvHeader="Dosis" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Dosis</TableHeaderColumn>
-            <TableHeaderColumn dataField="quantity" dataSort csvHeader="Kuantitas" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Kuantitas</TableHeaderColumn>
+            <TableHeaderColumn dataField="quantity" dataSort csvHeader="Kuantitas" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="120">Kuantitas</TableHeaderColumn>
             <TableHeaderColumn dataField="price" dataSort dataFormat={this.priceFormatter.bind(this)} csvHeader="Harga" thStyle={ { whiteSpace: 'normal' } } tdStyle={ { whiteSpace: 'normal' } } width="100">Harga</TableHeaderColumn>
             <TableHeaderColumn dataAlign="center" dataField='action' export={false} dataFormat={ this.actionFormatter.bind(this) } thStyle={ { whiteSpace: 'normal', width: 300 } } tdStyle={ { whiteSpace: 'normal', width: 300 } } searchable={false} expandable={ false }>Action</TableHeaderColumn>
         </BootstrapTable>

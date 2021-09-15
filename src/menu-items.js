@@ -2,7 +2,7 @@ import cookie from 'react-cookies'
 
 let route;
 
-if(cookie.load('roleId') < 3){
+if(cookie.load('roleId') <= 2){
     route = {
         items: [
             {
